@@ -1,0 +1,15 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: mts-link-api
+      POSTGRES_USER: mts-link-api
+      POSTGRES_PASSWORD: mts-link-api
+    volumes:
+      - "db:/var/lib/postgresql/data"
+
+volumes:
+  db:
