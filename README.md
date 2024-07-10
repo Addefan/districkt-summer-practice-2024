@@ -12,4 +12,5 @@
 1. Активировать виртуальное откружение - `poety shell`
 2. Установить зависимости - `poetry install`
 3. Поднять базу данных - `docker compose up -d`
-4. 
+4. Создать таблицы в базе данных - `python -m src.database.createtables`
+5. 
