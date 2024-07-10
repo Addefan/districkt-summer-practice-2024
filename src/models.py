@@ -18,7 +18,7 @@ class User(Base):
 
 class AttendanceStatistic(Base):
     __tablename__ = "attendance_statistics"
-    id = mapped_column(Integer, primary_key=True)
+    id = mapped_column(String(36), primary_key=True)
 
     new = mapped_column(Integer)
     other = mapped_column(Integer)
@@ -27,7 +27,7 @@ class AttendanceStatistic(Base):
 
 class PlatformStatistic(Base):
     __tablename__ = "platform_statistics"
-    id = mapped_column(Integer, primary_key=True)
+    id = mapped_column(String(36), primary_key=True)
 
     android = mapped_column(Integer)
     web = mapped_column(Integer)
@@ -50,18 +50,18 @@ class Event(Base):
     registered_count = mapped_column(Integer)
     registered_visited_count = mapped_column(Integer)
 
-    attendance_id = mapped_column(Integer, ForeignKey("attendance_statistics.id"))
-    attendance = relationship(AttendanceStatistic, uselist=False)
+    attendance_statistic_id = mapped_column(String(36), ForeignKey("attendance_statistics.id"))
+    attendance_statistic = relationship(AttendanceStatistic, uselist=False)
 
     country = mapped_column(JSON)
 
-    platform_id = mapped_column(Integer, ForeignKey("platform_statistics.id"))
-    platform = relationship(PlatformStatistic, uselist=False)
+    platform_statistic_id = mapped_column(String(36), ForeignKey("platform_statistics.id"))
+    platform_statistic = relationship(PlatformStatistic, uselist=False)
 
     utms = mapped_column(JSON)
 
     create_user_id = mapped_column(Integer, ForeignKey("users.id"))
-    create_user = relationship(User, back_populates="events")
+    create_user = relationship(User)
 
     referrer = mapped_column(JSON)
 

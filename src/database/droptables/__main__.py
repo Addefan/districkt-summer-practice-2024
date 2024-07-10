@@ -1,12 +1,9 @@
-from sqlalchemy import create_engine
-
+from src.database import get_engine
 from src.models import Base
-from src.settings import DATABASE_URL
 
 
 def main():
-    engine = create_engine(DATABASE_URL)
-    Base.metadata.drop_all(engine)
+    Base.metadata.drop_all(get_engine())
     print("Таблицы успешно удалены.")
 
 
