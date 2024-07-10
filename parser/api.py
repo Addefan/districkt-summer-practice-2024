@@ -1,5 +1,6 @@
 import requests
 
+from parser.errors import handle_errors
 from src.settings import API_TOKEN
 
 
@@ -17,6 +18,7 @@ def get_events(from_date, to_date, user_id, event_id):
         "x-auth-token": API_TOKEN,
     }
 
-    return requests.get(url, headers=headers, params=params)
+    response = requests.get(url, headers=headers, params=params)
+    has_error = handle_errors(response.status_code)
 
-
+    return [] if has_error else response.json()
