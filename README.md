@@ -14,4 +14,7 @@
 2. Установить зависимости - `poetry install`
 3. Поднять базу данных - `docker compose up -d`
 4. Создать таблицы в базе данных - `python -m src.database.createtables`
-5. 
+5. Запустить скрипт - `python -m src.parser [-uid USER_ID] [-eid EVENT_ID] {секунда,минута,час,день,неделя,месяц,год} periodicity_value [from] [to]`
+
+Вызов справки по параметрам скрипта: `python -m src.parser -h` или `python -m src.parser --help`  
+Пример запуска: `python -m src.parser час 3 "01.01.2024 00:00:00"`

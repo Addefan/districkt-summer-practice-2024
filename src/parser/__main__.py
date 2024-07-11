@@ -1,4 +1,3 @@
-import logging
 import time
 from datetime import datetime, timedelta
 from functools import partial
@@ -11,6 +10,8 @@ from sqlalchemy.orm import Session
 from src.parser.api import get_events
 from src.database import get_engine
 from src.models import User, AttendanceStatistic, PlatformStatistic, Event
+from src.parser.cli import parse_args
+from src.parser.utils import get_seconds_from_periodicity
 
 
 def handle_empty_args(from_date, to_date, user_id, event_id):
@@ -85,8 +86,12 @@ def parse_events(from_date: datetime | None = None, to_date: datetime | None = N
 
 
 def main():
-    # TODO: get seconds and from, to, userId, eventId from CLI args
-    schedule.every(10).seconds.do(partial(parse_events, None, None, None, None))
+    args = parse_args()
+
+    periodicity = get_seconds_from_periodicity(args.periodicity_unit, args.periodicity_value)
+    parse_concrete_events = partial(parse_events, getattr(args, "from"), args.to, args.user_id, args.event_id)
+
+    schedule.every(periodicity).seconds.do(parse_concrete_events)
 
     while True:
         schedule.run_pending()
