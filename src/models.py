@@ -1,5 +1,7 @@
+from datetime import timedelta, datetime
+
 from sqlalchemy import Integer, String, DateTime, ForeignKey, JSON, Interval
-from sqlalchemy.orm import DeclarativeBase, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, mapped_column, relationship, Mapped
 
 
 class Base(DeclarativeBase):
@@ -8,61 +10,61 @@ class Base(DeclarativeBase):
 
 class User(Base):
     __tablename__ = "users"
-    id = mapped_column(Integer, primary_key=True, autoincrement=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
 
-    name = mapped_column(String(255))
-    second_name = mapped_column(String(255))
+    name: Mapped[str] = mapped_column(String(255))
+    second_name: Mapped[str] = mapped_column(String(255))
 
-    email = mapped_column(String(254))
+    email: Mapped[str] = mapped_column(String(254))
 
 
 class AttendanceStatistic(Base):
     __tablename__ = "attendance_statistics"
-    id = mapped_column(String(36), primary_key=True)
+    event_id: Mapped[int] = mapped_column(Integer, ForeignKey("events.id"), primary_key=True)
+    event: Mapped["Event"] = relationship("Event", back_populates="attendance_statistic")
 
-    new = mapped_column(Integer)
-    other = mapped_column(Integer)
-    regular = mapped_column(Integer)
+    new: Mapped[int] = mapped_column(Integer)
+    other: Mapped[int] = mapped_column(Integer)
+    regular: Mapped[int] = mapped_column(Integer)
 
 
 class PlatformStatistic(Base):
     __tablename__ = "platform_statistics"
-    id = mapped_column(String(36), primary_key=True)
+    event_id: Mapped[int] = mapped_column(Integer, ForeignKey("events.id"), primary_key=True)
+    event: Mapped["Event"] = relationship("Event", back_populates="platform_statistic")
 
-    android = mapped_column(Integer)
-    web = mapped_column(Integer)
-    ios = mapped_column(Integer)
+    android: Mapped[int] = mapped_column(Integer)
+    web: Mapped[int] = mapped_column(Integer)
+    ios: Mapped[int] = mapped_column(Integer)
 
 
 class Event(Base):
     __tablename__ = "events"
-    id = mapped_column(Integer, primary_key=True, autoincrement=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=False)
 
-    name = mapped_column(String)
+    name: Mapped[str] = mapped_column(String)
 
-    starts_at = mapped_column(DateTime)
-    ends_at = mapped_column(DateTime)
-    duration = mapped_column(Interval)
+    starts_at: Mapped[datetime] = mapped_column(DateTime)
+    ends_at: Mapped[datetime] = mapped_column(DateTime)
+    duration: Mapped[timedelta] = mapped_column(Interval)
 
-    invited_count = mapped_column(Integer)
-    invited_visited_count = mapped_column(Integer)
+    invited_count: Mapped[int] = mapped_column(Integer)
+    invited_visited_count: Mapped[int] = mapped_column(Integer)
 
-    registered_count = mapped_column(Integer)
-    registered_visited_count = mapped_column(Integer)
+    registered_count: Mapped[int] = mapped_column(Integer)
+    registered_visited_count: Mapped[int] = mapped_column(Integer)
 
-    attendance_statistic_id = mapped_column(String(36), ForeignKey("attendance_statistics.id"))
-    attendance_statistic = relationship(AttendanceStatistic, uselist=False)
+    attendance_statistic: Mapped[AttendanceStatistic] = relationship(AttendanceStatistic)
 
-    country = mapped_column(JSON)
+    country: Mapped[dict] = mapped_column(JSON)
 
-    platform_statistic_id = mapped_column(String(36), ForeignKey("platform_statistics.id"))
-    platform_statistic = relationship(PlatformStatistic, uselist=False)
+    platform_statistic: Mapped[PlatformStatistic] = relationship(PlatformStatistic)
 
-    utms = mapped_column(JSON)
+    utms: Mapped[dict] = mapped_column(JSON)
 
-    create_user_id = mapped_column(Integer, ForeignKey("users.id"))
-    create_user = relationship(User)
+    create_user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
+    create_user: Mapped[User] = relationship(User)
 
-    referrer = mapped_column(JSON)
+    referrer: Mapped[dict] = mapped_column(JSON)
 
-    context = mapped_column(String(127))
+    context: Mapped[str] = mapped_column(String(127))

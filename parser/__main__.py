@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime, timedelta
-from uuid import uuid4
 
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.dialects.postgresql import insert
@@ -34,7 +33,7 @@ def create_events(api_events):
         users.append(user)
 
         attendance_statistic = {
-            "id": uuid4(),
+            "event_id": api_event["id"],
             "new": api_event["attendance"]["NEW"],
             "other": api_event["attendance"]["OTHER"],
             "regular": api_event["attendance"]["REGULAR"],
@@ -42,7 +41,7 @@ def create_events(api_events):
         attendance_statistics.append(attendance_statistic)
 
         platform_statistic = {
-            "id": uuid4(),
+            "event_id": api_event["id"],
             "android": api_event["platform"]["Android"],
             "web": api_event["platform"]["Web"],
             "ios": api_event["platform"]["iOs"],
@@ -59,9 +58,7 @@ def create_events(api_events):
             "invited_visited_count": api_event["invitedVisitedCount"],
             "registered_count": api_event["registeredCount"],
             "registered_visited_count": api_event["registeredVisitedCount"],
-            "attendance_statistic_id": attendance_statistic["id"],
             "country": api_event["country"],
-            "platform_statistic_id": platform_statistic["id"],
             "utms": api_event["utms"],
             "create_user_id": user["id"],
             "referrer": api_event["referrer"],
@@ -71,9 +68,9 @@ def create_events(api_events):
 
     with Session(get_engine()) as session:
         session.execute(insert(User).values(users).on_conflict_do_nothing())
+        session.execute(insert(Event).values(events).on_conflict_do_nothing())
         session.execute(insert(AttendanceStatistic).values(attendance_statistics).on_conflict_do_nothing())
         session.execute(insert(PlatformStatistic).values(platform_statistics).on_conflict_do_nothing())
-        session.execute(insert(Event).values(events).on_conflict_do_nothing())
         session.commit()
 
 
