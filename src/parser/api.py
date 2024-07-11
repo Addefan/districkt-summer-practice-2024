@@ -1,6 +1,6 @@
 import requests
 
-from parser.errors import handle_errors
+from src.parser.errors import handle_errors
 from src.settings import API_TOKEN
 
 

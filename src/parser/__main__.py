@@ -1,11 +1,14 @@
 import logging
+import time
 from datetime import datetime, timedelta
+from functools import partial
 
+import schedule
 from dateutil.relativedelta import relativedelta
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from parser.api import get_events
+from src.parser.api import get_events
 from src.database import get_engine
 from src.models import User, AttendanceStatistic, PlatformStatistic, Event
 
@@ -74,11 +77,20 @@ def create_events(api_events):
         session.commit()
 
 
-def main(from_date: datetime | None = None, to_date: datetime | None = None,
-         user_id: int | None = None, event_id: int | None = None):
+def parse_events(from_date: datetime | None = None, to_date: datetime | None = None,
+                 user_id: int | None = None, event_id: int | None = None):
     from_date, to_date, user_id, event_id = handle_empty_args(from_date, to_date, user_id, event_id)
     events = get_events(from_date, to_date, user_id, event_id)
     create_events(events)
+
+
+def main():
+    # TODO: get seconds and from, to, userId, eventId from CLI args
+    schedule.every(10).seconds.do(partial(parse_events, None, None, None, None))
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 
 if __name__ == "__main__":

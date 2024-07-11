@@ -7,8 +7,9 @@
 
 ### Запуск
 
-**Примечание.** Для работы требуется **[Python](https://www.python.org/downloads/)** и **[Poetry](https://python-poetry.org/docs/)**.
+**Примечание.** Для работы требуется **[Python](https://www.python.org/downloads/) (не ниже 3.10)** и **[Poetry](https://python-poetry.org/docs/)**.
 
+0. Добавить переменную `API_TOKEN` в файл `.env` в корне проекта
 1. Активировать виртуальное откружение - `poety shell`
 2. Установить зависимости - `poetry install`
 3. Поднять базу данных - `docker compose up -d`
