@@ -18,3 +18,5 @@
 
 Вызов справки по параметрам скрипта: `python -m src.parser -h` или `python -m src.parser --help`  
 Пример запуска: `python -m src.parser час 3 "01.01.2024 00:00:00"`
+
+#### [Дашборд в Yandex DataLens с некоторой статистикой на основании данных с API от 01.01.2024 00:00:00 до 10.07.2024 00:00:00](https://datalens.yandex/ulx5vdyex5cuh)
